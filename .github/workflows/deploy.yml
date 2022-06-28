@@ -1,0 +1,19 @@
+name: deploy
+
+on:
+  workflow_run:
+    workflows: ["update"]
+    branches: [main]
+    types:
+      - completed
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: s0/git-publish-subdir-action@develop
+        env:
+          FOLDER: whoogle-search-main
+          REPO: self
+          BRANCH: dev
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}                
