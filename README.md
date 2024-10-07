@@ -115,7 +115,7 @@ ___
 
 ### [Fly.io](https://fly.io)
 
-You will need a [Fly.io](https://fly.io) account to deploy Whoogle. The [free allowances](https://fly.io/docs/about/pricing/#free-allowances) are enough for personal use.
+You will need a [Fly.io](https://fly.io) account to deploy Whoogle.
 
 #### Install the CLI: https://fly.io/docs/hands-on/installing/
 
@@ -131,6 +131,9 @@ To fix this, open the generated `fly.toml` file, set `services.internal_port` to
 
 Your app is now available at `https://<app-name>.fly.dev`.
 
+Notes:
+- Requires a [**PAID**](https://fly.io/docs/about/pricing/#free-allowances) Fly.io Account.
+
 ___
 
 ### [Koyeb](https://www.koyeb.com)
@@ -145,7 +148,7 @@ ___
 ### [pipx](https://github.com/pipxproject/pipx#install-pipx)
 Persistent install:
 
-`pipx install git+https://github.com/benbusby/whoogle-search.git`
+`pipx install https://github.com/benbusby/whoogle-search/archive/refs/heads/main.zip`
 
 Sandboxed temporary instance:
 
@@ -235,6 +238,7 @@ Description=Whoogle
 #Environment=WHOOGLE_ALT_WIKI=farside.link/wikiless
 #Environment=WHOOGLE_ALT_IMDB=farside.link/libremdb
 #Environment=WHOOGLE_ALT_QUORA=farside.link/quetre
+#Environment=WHOOGLE_ALT_SO=farside.link/anonymousoverflow
 # Load values from dotenv only
 #Environment=WHOOGLE_DOTENV=1
 Type=simple
@@ -428,6 +432,7 @@ There are a few optional environment variables available for customizing a Whoog
 | WHOOGLE_ALT_WIKI     | The wikipedia.org alternative to use when site alternatives are enabled in the config. Set to "" to disable. |
 | WHOOGLE_ALT_IMDB     | The imdb.com alternative to use when site alternatives are enabled in the config. Set to "" to disable.  |
 | WHOOGLE_ALT_QUORA    | The quora.com alternative to use when site alternatives are enabled in the config. Set to "" to disable. |
+| WHOOGLE_ALT_SO       | The stackoverflow.com alternative to use when site alternatives are enabled in the config. Set to "" to disable. |
 | WHOOGLE_AUTOCOMPLETE | Controls visibility of autocomplete/search suggestions. Default on -- use '0' to disable. |
 | WHOOGLE_MINIMAL      | Remove everything except basic result cards from all search queries.                      |
 | WHOOGLE_CSP          | Sets a default set of 'Content-Security-Policy' headers                                   |
@@ -504,7 +509,7 @@ Browser settings:
         - Search string to use: `https://\<your whoogle url\>/search?q=%s`
   - [Alfred](https://www.alfredapp.com/) (Mac OS X)
 	  1. Go to `Alfred Preferences` > `Features` > `Web Search` and click `Add Custom Search`. Then configure these settings
-		   - Search URL: `https://\<your whoogle url\>/search?q={query}
+		   - Search URL: `https://\<your whoogle url\>/search?q={query}`
 		   - Title: `Whoogle for '{query}'` (or whatever you want)
 		   - Keyword: `whoogle`
 
@@ -596,6 +601,7 @@ server {
 	    proxy_set_header X-Forwarded-Proto $scheme;
 	    proxy_set_header Host $host;
 	    proxy_set_header X-NginX-Proxy true;
+	    proxy_set_header X-Forwarded-Host $http_host;
 	    proxy_pass http://localhost:5000;
 	}
 }
