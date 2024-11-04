@@ -241,6 +241,8 @@ Description=Whoogle
 #Environment=WHOOGLE_ALT_SO=farside.link/anonymousoverflow
 # Load values from dotenv only
 #Environment=WHOOGLE_DOTENV=1
+# specify dotenv location if not in default location
+#Environment=WHOOGLE_DOTENV_PATH=<path/to>/whoogle.env
 Type=simple
 User=<username>
 # If installed as a package, add:
@@ -411,6 +413,7 @@ There are a few optional environment variables available for customizing a Whoog
 | -------------------- | ----------------------------------------------------------------------------------------- |
 | WHOOGLE_URL_PREFIX   | The URL prefix to use for the whoogle instance (i.e. "/whoogle")                          |
 | WHOOGLE_DOTENV       | Load environment variables in `whoogle.env`                                               |
+| WHOOGLE_DOTENV_PATH  | The path to `whoogle.env` if not in default location                                      |
 | WHOOGLE_USER         | The username for basic auth. WHOOGLE_PASS must also be set if used.                       |
 | WHOOGLE_PASS         | The password for basic auth. WHOOGLE_USER must also be set if used.                       |
 | WHOOGLE_PROXY_USER   | The username of the proxy server.                                                         |
@@ -442,6 +445,7 @@ There are a few optional environment variables available for customizing a Whoog
 | WHOOGLE_TOR_CONF | The absolute path to the config file containing the password for the tor control port. Default: ./misc/tor/control.conf WHOOGLE_TOR_PASS must be 1 for this to work.|
 | WHOOGLE_SHOW_FAVICONS | Show/hide favicons next to search result URLs. Default on.                               |
 | WHOOGLE_UPDATE_CHECK  | Enable/disable the automatic daily check for new versions of Whoogle. Default on.        |
+| WHOOGLE_FALLBACK_ENGINE_URL | Set a fallback Search Engine URL when there is internal server error or instance is rate-limited. Search query is appended to the end of the URL (eg. https://duckduckgo.com/?k1=-1&q=). |
 
 ### Config Environment Variables
 These environment variables allow setting default config values, but can be overwritten manually by using the home page config menu. These allow a shortcut for destroying/rebuilding an instance to the same config state every time.
