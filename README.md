@@ -155,6 +155,13 @@ Use one of the following guides to install Whoogle on Koyeb:
 
 ___
 
+### [RepoCloud](https://repocloud.io)
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/?app_id=309)
+
+1. Sign up for a free [RepoCloud account](https://repocloud.io) and receive free credits to get started.
+2. Click "Deploy" to launch the app and access it instantly via your RepoCloud URL.
+___
+
 ### [pipx](https://github.com/pipxproject/pipx#install-pipx)
 Persistent install:
 
@@ -399,7 +406,7 @@ To use the Kubernetes Helm Chart:
 1. Ensure you have [Helm](https://helm.sh/docs/intro/install/) `>=3.0.0` installed
 2. Clone this repository
 3. Update [charts/whoogle/values.yaml](./charts/whoogle/values.yaml) as desired
-4. Run `helm install whoogle ./charts/whoogle`
+4. Run `helm upgrade --install whoogle ./charts/whoogle`
 
 ___
 
