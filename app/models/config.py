@@ -45,6 +45,7 @@ class Config:
         self.user_agent = kwargs.get('user_agent', default_ua_option)
         self.custom_user_agent = kwargs.get('custom_user_agent', '')
         self.use_custom_user_agent = kwargs.get('use_custom_user_agent', False)
+        self.show_user_agent = read_config_bool('WHOOGLE_CONFIG_SHOW_USER_AGENT')
 
         # Add user agent related keys to safe_keys
         self.safe_keys = [
@@ -64,7 +65,7 @@ class Config:
             'user_agent',
             'custom_user_agent',
             'use_custom_user_agent',
-            'use_leta'
+            'show_user_agent'
         ]
 
         app_config = current_app.config
@@ -80,7 +81,6 @@ class Config:
         self.tbs = os.getenv('WHOOGLE_CONFIG_TIME_PERIOD', '')
         self.theme = os.getenv('WHOOGLE_CONFIG_THEME', 'system')
         self.safe = read_config_bool('WHOOGLE_CONFIG_SAFE')
-        self.dark = read_config_bool('WHOOGLE_CONFIG_DARK')  # deprecated
         self.alts = read_config_bool('WHOOGLE_CONFIG_ALTS')
         self.nojs = read_config_bool('WHOOGLE_CONFIG_NOJS')
         self.tor = read_config_bool('WHOOGLE_CONFIG_TOR')
@@ -91,7 +91,6 @@ class Config:
         self.anon_view = read_config_bool('WHOOGLE_CONFIG_ANON_VIEW')
         self.preferences_encrypted = read_config_bool('WHOOGLE_CONFIG_PREFERENCES_ENCRYPTED')
         self.preferences_key = os.getenv('WHOOGLE_CONFIG_PREFERENCES_KEY', '')
-        self.use_leta = read_config_bool('WHOOGLE_CONFIG_USE_LETA', default=True)
 
         self.accept_language = False
 
@@ -99,13 +98,13 @@ class Config:
         if kwargs:
             mutable_attrs = self.get_mutable_attrs()
             for attr in mutable_attrs:
-                if attr in kwargs.keys():
+                if attr == 'show_user_agent':
+                    # Handle show_user_agent as boolean
+                    self.show_user_agent = bool(kwargs.get(attr))
+                elif attr in kwargs.keys():
                     setattr(self, attr, kwargs[attr])
                 elif attr not in kwargs.keys() and mutable_attrs[attr] == bool:
-                    # Only set to False if the attribute wasn't already set to True
-                    # by environment defaults (e.g., use_leta defaults to True)
-                    if not getattr(self, attr, False):
-                        setattr(self, attr, False)
+                    setattr(self, attr, False)
 
     def __getitem__(self, name):
         return getattr(self, name)

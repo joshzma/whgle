@@ -420,8 +420,7 @@ def get_tabs_content(tabs: dict,
                      full_query: str,
                      search_type: str,
                      preferences: str,
-                     translation: dict,
-                     use_leta: bool = False) -> dict:
+                     translation: dict) -> dict:
     """Takes the default tabs content and updates it according to the query.
 
     Args:
@@ -429,7 +428,6 @@ def get_tabs_content(tabs: dict,
         full_query: The original search query
         search_type: The current search_type
         translation: The translation to get the names of the tabs
-        use_leta: Whether Mullvad Leta backend is being used
 
     Returns:
         dict: contains the name, the href and if the tab is selected or not
@@ -439,11 +437,6 @@ def get_tabs_content(tabs: dict,
         block_idx = full_query.index('-site:')
         map_query = map_query[:block_idx]
     tabs = copy.deepcopy(tabs)
-    
-    # If using Leta, remove unsupported tabs (images, videos, news, maps)
-    if use_leta:
-        tabs = {k: v for k, v in tabs.items() if k == 'all'}
-    
     for tab_id, tab_content in tabs.items():
         # update name to desired language
         if tab_id in translation:

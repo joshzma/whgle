@@ -217,9 +217,7 @@ def index():
                            translation=app.config['TRANSLATIONS'][
                                g.user_config.get_localization_lang()
                            ],
-                           logo=render_template(
-                               'logo.html',
-                               dark=g.user_config.dark),
+                           logo=render_template('logo.html'),
                            config_disabled=(
                                    app.config['CONFIG_DISABLE'] or
                                    not valid_user_session(session)),
@@ -342,16 +340,6 @@ def search():
     if not query:
         return redirect(url_for('.index'))
 
-    # Check if using Leta with unsupported search type
-    tbm_value = request.args.get('tbm', '').strip()
-    if g.user_config.use_leta and tbm_value:
-        session['error_message'] = (
-            "Image, video, news, and map searches are not supported when using "
-            "Mullvad Leta as the search backend. Please disable Leta in settings "
-            "or perform a regular web search."
-        )
-        return redirect(url_for('.index'))
-
     # Generate response and number of external elements from the page
     try:
         response = search_util.generate_response()
@@ -428,8 +416,7 @@ def search():
                             full_query_val,
                             search_util.search_type,
                             g.user_config.preferences,
-                            translation,
-                            g.user_config.use_leta)
+                            translation)
 
     # Feature to display currency_card
     # Since this is determined by more than just the
@@ -555,6 +542,13 @@ def search():
             'results': results
         })
 
+    # Get the user agent that was used for the search
+    used_user_agent = ''
+    if search_util.user_request:
+        used_user_agent = search_util.user_request.modified_user_agent
+    elif hasattr(g, 'user_request') and g.user_request:
+        used_user_agent = g.user_request.modified_user_agent
+    
     return render_template(
         'display.html',
         has_update=app.config['HAS_UPDATE'],
@@ -576,6 +570,7 @@ def search():
         ) and not search_util.search_type,  # Standard search queries only
         response=cleanresponse,
         version_number=app.config['VERSION_NUMBER'],
+        used_user_agent=used_user_agent,
         search_header=render_template(
             'header.html',
             home_url=home_url,
@@ -584,7 +579,7 @@ def search():
             languages=app.config['LANGUAGES'],
             countries=app.config['COUNTRIES'],
             time_periods=app.config['TIME_PERIODS'],
-            logo=render_template('logo.html', dark=g.user_config.dark),
+            logo=render_template('logo.html'),
             query=urlparse.unquote(query),
             search_type=search_util.search_type,
             mobile=g.user_request.mobile,
